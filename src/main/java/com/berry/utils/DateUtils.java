@@ -11,7 +11,6 @@ import java.util.List;
 /**
  * 计算周的时候是根据 周一为每周的第一天 ，  每年的第一周最少有几天   odps函数  weekofyear  4天以上 包含4天
  * Description (日期工具类)
- * author: gaoxueyong
  * Create at: 2017/11/23 9:46
  */
 public class DateUtils {
@@ -78,14 +77,14 @@ public class DateUtils {
                 calendar.setTime(sdf.parse(date_str));
             }
 
-            int day_of_week = calendar.get(Calendar.DAY_OF_WEEK);
+            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
-            if (day_of_week == 1) {
+            if (dayOfWeek == 1) {
                 //周日
                 calendar.add(Calendar.DATE, -6);
             } else {
-//                day_of_week ==2  周一
-                calendar.add(Calendar.DATE, -(day_of_week - 2));
+                //day_of_week ==2  周一
+                calendar.add(Calendar.DATE, -(dayOfWeek - 2));
             }
             return sdf.format(calendar.getTime());
         } catch (Exception e) {
@@ -104,14 +103,14 @@ public class DateUtils {
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Calendar calendar = Calendar.getInstance();
-            int day_of_week = calendar.get(Calendar.DAY_OF_WEEK);
+            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
 
-            if (day_of_week == 1) {
+            if (dayOfWeek == 1) {
                 //周日
                 calendar.add(Calendar.DATE, -13);
             } else {
-//                day_of_week ==2  周一
-                calendar.add(Calendar.DATE, -(day_of_week + 5));
+                //day_of_week ==2  周一
+                calendar.add(Calendar.DATE, -(dayOfWeek + 5));
             }
             return sdf.format(calendar.getTime());
         } catch (Exception e) {
@@ -147,12 +146,12 @@ public class DateUtils {
 
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Calendar calendar = Calendar.getInstance();
-            int day_of_week = calendar.get(Calendar.DAY_OF_WEEK);
-            if (day_of_week == 1) {
+            int dayOfWeek = calendar.get(Calendar.DAY_OF_WEEK);
+            if (dayOfWeek == 1) {
                 //周日
                 calendar.add(Calendar.DATE, -20);
             } else {
-                calendar.add(Calendar.DATE, -(day_of_week + 12));
+                calendar.add(Calendar.DATE, -(dayOfWeek + 12));
             }
             return sdf.format(calendar.getTime());
         } catch (Exception e) {
@@ -165,18 +164,18 @@ public class DateUtils {
      *
      * @return
      */
-    public static String getCurrentTime_yyyyMMdd() {
+    public static String getCurrentTimeDay() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
         return sdf.format(new Date());
     }
 
 
     /**
-     * 获取当前日期的字符串 如  20171116
+     * 获取当前日期的字符串 如  20171116135043
      *
      * @return
      */
-    public static String getCurrentTime_yyyyMMddHHmmss() {
+    public static String getCurrentTimeSec() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddHHmmss");
         return sdf.format(new Date());
     }
@@ -187,7 +186,7 @@ public class DateUtils {
      *
      * @return
      */
-    public static String getCurrentTime_yyyy_MM_dd_HH_mm_ss() {
+    public static String getCurrentTimetandard() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return sdf.format(new Date());
     }
@@ -197,11 +196,11 @@ public class DateUtils {
      * 根据年、周数获取该周的具体日期
      *
      * @param year    year可以为null
-     * @param week_no
+     * @param weekNo
      * @return
      */
-    public static List<String> getListWeekDaysByWeekNo(Integer year, Integer week_no) {
-        if (week_no == null) {
+    public static List<String> getListWeekDaysByWeekNo(Integer year, Integer weekNo) {
+        if (weekNo == null) {
             return null;
         }
         SimpleDateFormat sf = new SimpleDateFormat("yyyy-MM-dd");
@@ -209,73 +208,35 @@ public class DateUtils {
         if (year != null) {
             calendar.set(Calendar.YEAR, year);
         }
-        calendar.set(Calendar.WEEK_OF_YEAR, week_no);
+        calendar.set(Calendar.WEEK_OF_YEAR, weekNo);
         calendar.setFirstDayOfWeek(Calendar.MONDAY);
-//        每年的第一周最少有几天   odps函数  weekofyear  4天以上
+        //每年的第一周最少有几天   odps函数  weekofyear  4天以上
         calendar.setMinimalDaysInFirstWeek(4);
         List result = new ArrayList();
-        calendar.set(Calendar.DAY_OF_WEEK, 2);// 1表示周日，2表示周一，7表示周六
-        result.add(sf.format(calendar.getTime()));//周一
+        // 1表示周日，2表示周一，7表示周六
+        calendar.set(Calendar.DAY_OF_WEEK, 2);
+        //周一
+        result.add(sf.format(calendar.getTime()));
         calendar.set(Calendar.DAY_OF_WEEK, 3);
-        result.add(sf.format(calendar.getTime()));//周二
+        //周二
+        result.add(sf.format(calendar.getTime()));
         calendar.set(Calendar.DAY_OF_WEEK, 4);
-        result.add(sf.format(calendar.getTime()));//周三
+        //周三
+        result.add(sf.format(calendar.getTime()));
         calendar.set(Calendar.DAY_OF_WEEK, 5);
-        result.add(sf.format(calendar.getTime()));//周四
+        //周四
+        result.add(sf.format(calendar.getTime()));
         calendar.set(Calendar.DAY_OF_WEEK, 6);
-        result.add(sf.format(calendar.getTime()));//周五
+        //周五
+        result.add(sf.format(calendar.getTime()));
         calendar.set(Calendar.DAY_OF_WEEK, 7);
-        result.add(sf.format(calendar.getTime()));//周六
+        //周六
+        result.add(sf.format(calendar.getTime()));
         calendar.set(Calendar.DAY_OF_WEEK, 1);
-        result.add(sf.format(calendar.getTime()));//周日
+        //周日
+        result.add(sf.format(calendar.getTime()));
 
         return result;
     }
-
-    public static void main(String[] args) {
-//        System.out.println("2017-01-01>>>>>>>>"+getWeekOfYear("2017-01-01"));
-//        System.out.println("2017-01-02>>>>>>>>"+getWeekOfYear("2017-01-02"));
-//
-//        System.out.println("2017-11-12>>>>>>>>"+getWeekOfYear("2017-11-12"));
-//        System.out.println("2017-11-13>>>>>>>>"+getWeekOfYear("2017-11-13"));
-//
-//        System.out.println("2016-05-01>>>>>>>>"+getWeekOfYear("2016-05-01"));
-//        System.out.println("2016-05-02>>>>>>>>"+getWeekOfYear("2016-05-02"));
-//
-//        System.out.println("2017-12-31>>>>>>>>"+getWeekOfYear("2017-12-31"));
-//        System.out.println("2018-01-01>>>>>>>>"+getWeekOfYear("2018-01-01"));
-//
-//        System.out.println("2014-12-29>>>>>>>>"+getWeekOfYear("2014-12-29")); //1
-//        System.out.println("2014-12-31>>>>>>>>"+getWeekOfYear("2014-12-31")); //1
-//        System.out.println("2015-12-29>>>>>>>>"+getWeekOfYear("2015-12-29")); //53
-
-
-//        System.out.println(getWeekMonday("2017-11-06"));
-//        System.out.println(getWeekMonday("2017-11-07"));
-//        System.out.println(getWeekMonday("2017-11-08"));
-//        System.out.println(getWeekMonday("2017-11-09"));
-//        System.out.println(getWeekMonday("2017-11-10"));
-//        System.out.println(getWeekMonday("2017-11-11"));
-//        System.out.println( getWeekMonday("2017-11-12"));
-//        System.out.println(getWeekMonday(null));
-
-//        System.out.println(getLastLastWeekMonday());
-//        System.out.println(getLastWeekMonday());
-//        System.out.println(getLastWeekSunday());
-
-//        List<String> list = getListWeekDaysByWeekNo(2015,1);
-//        for(String str:list){
-//            System.out.println(str);
-//        }
-
-
-////        获取上上周是当年的第几周
-//        System.out.println(getWeekOfYear(getLastLastWeekMonday()));
-////        获取上周是当年的第几周
-//        System.out.println(getWeekOfYear(getLastWeekMonday()));
-
-
-    }
-
 
 }

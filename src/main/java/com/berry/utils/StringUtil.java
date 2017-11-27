@@ -1,8 +1,8 @@
 package com.berry.utils;
 
 
-import com.berry.utils.algorithmImpl.BCConvert;
-import com.berry.utils.algorithmImpl.StringImpl;
+import com.berry.utils.algorith.BCConvert;
+import com.berry.utils.algorith.StringImpl;
 
 import java.text.DecimalFormat;
 import java.util.*;

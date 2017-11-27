@@ -337,7 +337,7 @@ public final class ClassUtil {
                 }
             }
         } catch (IOException e) {
-            logger.error(ExceptionUtil.stackTraceToString(e, UtilConstant.APP_PACKAGE));
+            logger.error(ExceptionUtil.stackTraceToString(e));
         }
         return resource;
     }

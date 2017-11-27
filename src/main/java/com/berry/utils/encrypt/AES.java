@@ -1,4 +1,4 @@
-package com.berry.utils;
+package com.berry.utils.encrypt;
 
 
 import java.io.UnsupportedEncodingException;
@@ -65,11 +65,14 @@ public class AES {
             SecretKey secretKey = kgen.generateKey();
             byte[] enCodeFormat = secretKey.getEncoded();
             SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
-            Cipher cipher = Cipher.getInstance("AES");// 创建密码器
+            // 创建密码器
+            Cipher cipher = Cipher.getInstance("AES");
             byte[] byteContent = content.getBytes("utf-8");
-            cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化
+            // 初始化
+            cipher.init(Cipher.ENCRYPT_MODE, key);
             byte[] result = cipher.doFinal(byteContent);
-            return parseByte2HexStr(result); // 加密
+            // 加密
+            return ConvertUtil.bytesToHexString(result);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (NoSuchPaddingException e) {
@@ -101,11 +104,14 @@ public class AES {
             SecretKey secretKey = kgen.generateKey();
             byte[] enCodeFormat = secretKey.getEncoded();
             SecretKeySpec key = new SecretKeySpec(enCodeFormat, "AES");
-            Cipher cipher = Cipher.getInstance("AES");// 创建密码器
-            cipher.init(Cipher.DECRYPT_MODE, key);// 初始化
+            // 创建密码器
+            Cipher cipher = Cipher.getInstance("AES");
+            // 初始化
+            cipher.init(Cipher.DECRYPT_MODE, key);
             byte[] byteContent = parseHexStr2Byte(content);
+            // 加密结果
             byte[] result = cipher.doFinal(byteContent);
-            return new String(result); // 加密
+            return new String(result);
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (NoSuchPaddingException e) {
@@ -121,32 +127,15 @@ public class AES {
     }
 
     /**
-     * 将二进制转换成16进制
-     *
-     * @param buf
-     * @return
-     */
-    public static String parseByte2HexStr(byte buf[]) {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < buf.length; i++) {
-            String hex = Integer.toHexString(buf[i] & 0xFF);
-            if (hex.length() == 1) {
-                hex = '0' + hex;
-            }
-            sb.append(hex.toUpperCase());
-        }
-        return sb.toString();
-    }
-
-    /**
-     * 将16进制转换为二进制
+     * 将16进制字符串转换为二进制字符数组
      *
      * @param hexStr
      * @return
      */
-    public static byte[] parseHexStr2Byte(String hexStr) {
-        if (hexStr.length() < 1)
+    private static byte[] parseHexStr2Byte(String hexStr) {
+        if (hexStr.length() < 1) {
             return null;
+        }
         byte[] result = new byte[hexStr.length() / 2];
         for (int i = 0; i < hexStr.length() / 2; i++) {
             int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);
@@ -175,9 +164,11 @@ public class AES {
             SecretKeySpec key = new SecretKeySpec(password.getBytes(), "AES");
             Cipher cipher = Cipher.getInstance("AES/ECB/NoPadding");
             byte[] byteContent = content.getBytes("utf-8");
-            cipher.init(Cipher.ENCRYPT_MODE, key);// 初始化
+            // 初始化
+            cipher.init(Cipher.ENCRYPT_MODE, key);
+            // 加密结果
             byte[] result = cipher.doFinal(byteContent);
-            return result; // 加密
+            return result;
         } catch (NoSuchAlgorithmException e) {
             e.printStackTrace();
         } catch (NoSuchPaddingException e) {

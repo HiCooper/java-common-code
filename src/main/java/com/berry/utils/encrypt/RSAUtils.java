@@ -1,4 +1,4 @@
-package com.berry.utils;
+package com.berry.utils.encrypt;
 
 
 import java.io.FileInputStream;
@@ -20,20 +20,45 @@ import sun.misc.BASE64Encoder;
  * RSA
  */
 public class RSAUtils {
-    //默认公钥的持久化文件存放位置
+    /**
+     * 默认公钥的持久化文件存放位置
+     */
     private static String PUBLIC_KEY_FILE = "PublicKey";
-    //默认私钥的持久化文件存放位置
+    /**
+     * 默认私钥的持久化文件存放位置
+     */
     private static String PRIVATE_KEY_FILE = "PrivateKey";
 
-    //设置公私钥持久化文件的存放位置
+
+    public static void main(String[] args) throws Exception {
+        //设置公私钥对存放路径，可选，默认是工程目录
+        //RSAUtils.setKeyPath(str);
+        String str = "test";
+        System.out.println("加密前：" + str);
+        String secret = RSAUtils.encrypt(str);
+        System.out.println("RSA加密后：" + secret);
+        String original = RSAUtils.decrypt(secret);
+        System.out.println("RSA解密后：" + original);
+    }
+
+
+    /**
+     * 设置公私钥持久化文件的存放位置
+     *
+     * @param path
+     */
     public static void setKeyPath(String path) {
-        if (PUBLIC_KEY_FILE.equals("PublicKey")) {
+        if (PUBLIC_KEY_FILE.equals(PUBLIC_KEY_FILE)) {
             PUBLIC_KEY_FILE = path + (path.endsWith("//") ? "PublicKey" : "/PublicKey");
             PRIVATE_KEY_FILE = path + (path.endsWith("//") ? "PrivateKey" : "/PrivateKey");
         }
     }
 
-    //创建公私钥对
+    /**
+     * 创建公私钥对
+     *
+     * @throws Exception
+     */
     private static void createKeyPair() throws Exception {
         //使用RSA算法获得密钥对生成器对象keyPairGenerator
         KeyPairGenerator keyPairGenerator = KeyPairGenerator.getInstance("RSA");
@@ -62,8 +87,14 @@ public class RSAUtils {
         }
     }
 
-    //RSA加密
-    public static String encryptWithRSA(String str) throws Exception {
+    /**
+     * RSA加密
+     *
+     * @param str
+     * @return
+     * @throws Exception
+     */
+    public static String encrypt(String str) throws Exception {
         createKeyPair();
         Key publicKey = null;
         //读取持久化的公钥对象
@@ -87,8 +118,14 @@ public class RSAUtils {
         return new BASE64Encoder().encode(secret);
     }
 
-    //RSA解密
-    public static String decryptWithRSA(String secret) throws Exception {
+    /**
+     * RSA解密
+     *
+     * @param secret
+     * @return
+     * @throws Exception
+     */
+    public static String decrypt(String secret) throws Exception {
         Key privateKey;
         ObjectInputStream ois = null;
         try {
@@ -109,20 +146,4 @@ public class RSAUtils {
 
     }
 
-
-    public static void main(String[] args) throws Exception {
-        //设置公私钥对存放路径，可选，默认是工程目录
-        //RSAUtils.setKeyPath(str);
-        System.out.println("请输入明文：");
-        Scanner sca = new Scanner(System.in);
-        String str = sca.nextLine();
-        System.out.println("============================");
-        String secret = RSAUtils.encryptWithRSA(str);
-        System.out.println("经过RSA加密后的密文为：");
-        System.out.println(secret);
-        System.out.println("============================");
-        String original = RSAUtils.decryptWithRSA(secret);
-        System.out.println("经过RSA解密后的原文为：");
-        System.out.println(original);
-    }
 }

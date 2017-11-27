@@ -1,4 +1,4 @@
-package com.berry.utils;
+package com.berry.utils.encrypt;
 
 
 import java.security.SecureRandom;
@@ -18,13 +18,13 @@ public class DES {
 
     public static void main(String args[]) {
         // 待加密内容
-        String username = "bj_simsys";// 测试内容
+        String username = "bj_simsys";
+        System.out.println("加密前：" + username);
         // 密码，长度要是8的倍数
         String key = "1A2B3C4D5E6F78901234A5B6C7D8E9F0";
 
         byte[] result = DES.encrypt(username.getBytes(), key);
-        //System.out.println("解密后：" + new String(result));//字节看不懂
-        System.out.println("加密后：" + byteToHexString(result));
+        System.out.println("加密后：" + ConvertUtil.bytesToHexString(result));
 
         //解密
         byte[] decryResult = DES.decrypt(result, key);
@@ -88,19 +88,4 @@ public class DES {
         }
     }
 
-
-    /**
-     * 字节转ASICC码
-     */
-    public static String byteToHexString(byte[] bytes) {
-        StringBuffer sb = new StringBuffer(bytes.length);
-        String sTemp;
-        for (int i = 0; i < bytes.length; i++) {
-            sTemp = Integer.toHexString(0xFF & bytes[i]);
-            if (sTemp.length() < 2)
-                sb.append(0);
-            sb.append(sTemp.toUpperCase());
-        }
-        return sb.toString();
-    }
 }

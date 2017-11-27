@@ -1,4 +1,4 @@
-package com.berry.utils;
+package com.berry.utils.encrypt;
 
 import java.math.BigInteger;
 import java.security.MessageDigest;

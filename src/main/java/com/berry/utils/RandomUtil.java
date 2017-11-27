@@ -1,15 +1,24 @@
 package com.berry.utils;
 
 
+import com.berry.utils.encrypt.ConvertUtil;
+
+import java.io.UnsupportedEncodingException;
 import java.util.*;
 
 public final class RandomUtil {
-    public static final String ALLCHAR
-            = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    public static final String LETTERCHAR
-            = "abcdefghijkllmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
-    public static final String NUMBERCHAR
-            = "0123456789";
+    /**
+     * 所有字母和数字
+     */
+    public static final String ALLCHAR = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    /**
+     * 仅字母
+     */
+    public static final String LETTERCHAR = "abcdefghijkllmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    /**
+     * 仅数字
+     */
+    public static final String NUMBERCHAR = "0123456789";
 
 
     /**
@@ -25,12 +34,12 @@ public final class RandomUtil {
     }
 
     /**
-     * 返回固定长度的数字
+     * 获取指定长度纯数字字符串
      *
-     * @param length
-     * @return
+     * @param length 长度
+     * @return 长度为length的数字字符串
      */
-    public static String number(int length) {
+    public static String getRandomNumByLength(int length) {
         StringBuffer sb = new StringBuffer();
         Random random = new Random();
         for (int i = 0; i < length; i++) {
@@ -39,14 +48,15 @@ public final class RandomUtil {
         return sb.toString();
     }
 
+
     /**
-     * 返回一个定长的随机字符串(只包含大小写字母、数字)
+     * 返回一个定长的随机字符串(包含大小写字母、数字)
      *
      * @param length 随机字符串长度
-     * @return 随机字符串
+     * @return 长度为length的随机字符串
      */
-    public static String String(int length) {
-        StringBuffer sb = new StringBuffer();
+    public static String getRandomStrByLength(int length) {
+        StringBuilder sb = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < length; i++) {
             sb.append(ALLCHAR.charAt(random.nextInt(ALLCHAR.length())));
@@ -60,7 +70,7 @@ public final class RandomUtil {
      * @param length 随机字符串长度
      * @return 随机字符串
      */
-    public static String MixString(int length) {
+    public static String getRandomCharByLength(int length) {
         StringBuffer sb = new StringBuffer();
         Random random = new Random();
         for (int i = 0; i < length; i++) {
@@ -70,77 +80,34 @@ public final class RandomUtil {
     }
 
     /**
-     * 返回一个定长的随机纯大写字母字符串(只包含大小写字母)
+     * 返回一个定长的随机纯大写字母字符串(只包含小写字母)
      *
      * @param length 随机字符串长度
      * @return 随机字符串
      */
     public static String LowerString(int length) {
-        return MixString(length).toLowerCase();
+        return getRandomCharByLength(length).toLowerCase();
     }
 
     /**
-     * 返回一个定长的随机纯小写字母字符串(只包含大小写字母)
+     * 返回一个定长的随机纯小写字母字符串(只包含大写字母)
      *
      * @param length 随机字符串长度
      * @return 随机字符串
      */
     public static String UpperString(int length) {
-        return MixString(length).toUpperCase();
+        return getRandomCharByLength(length).toUpperCase();
     }
 
     /**
-     * 生成一个定长的纯0字符串
+     * 根据数字生成一个定长的字符串，长度不够前面补0
      *
+     * @param num    数字
      * @param length 字符串长度
-     * @return 纯0字符串
-     */
-    public static String ZeroString(int length) {
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < length; i++) {
-            sb.append('0');
-        }
-        return sb.toString();
-    }
-
-    /**
-     * 根据数字生成一个定长的字符串，长度不够前面补0
-     *
-     * @param num       数字
-     * @param fixdlenth 字符串长度
      * @return 定长的字符串
      */
-    public static String toFixdLengthString(long num, int fixdlenth) {
-        StringBuffer sb = new StringBuffer();
-        String strNum = String.valueOf(num);
-        if (fixdlenth - strNum.length() >= 0) {
-            sb.append(ZeroString(fixdlenth - strNum.length()));
-        } else {
-            throw new RuntimeException("将数字" +
-                    num + "转化为长度为" + fixdlenth + "的字符串发生异常！");
-        }
-        sb.append(strNum);
-        return sb.toString();
-    }
-
-    /**
-     * 根据数字生成一个定长的字符串，长度不够前面补0
-     *
-     * @param num       数字
-     * @param fixdlenth 字符串长度
-     * @return 定长的字符串
-     */
-    public static String toFixdLengthString(int num, int fixdlenth) {
-        StringBuffer sb = new StringBuffer();
-        String strNum = String.valueOf(num);
-        if (fixdlenth - strNum.length() >= 0) {
-            sb.append(ZeroString(fixdlenth - strNum.length()));
-        } else {
-            throw new RuntimeException("将数字" +
-                    num + "转化为长度为" + fixdlenth + "的字符串发生异常！");
-        }
-        sb.append(strNum);
-        return sb.toString();
+    public static String toFixLengthString(int num, int length) {
+        return String.format("%0" + length + "d", num);
     }
 
     /**
@@ -174,61 +141,65 @@ public final class RandomUtil {
 
     /**
      * 实现一个简单的字符串乘法
+     *
      * @param str
      * @param multiplication
      * @return
      */
-    private static String strMultiplication(String str,int multiplication){
+    private static String strMultiplication(String str, int multiplication) {
         StringBuffer buffer = new StringBuffer();
         for (int i = 0; i < multiplication; i++) {
             buffer.append(str);
         }
         return buffer.toString();
     }
+
     /**
      * 从指定的数组中按照指定比例返回指定的随机元素
+     *
      * @param param
      * @param percentum
      * @param <T>
      * @return
      */
-    public static <T> T randomItem(T[] param,double[] percentum){
+    public static <T> T randomItem(T[] param, double[] percentum) {
         int length = percentum.length;
         Integer[] ints = ArrayUtil.doubleBitCount(percentum);
         int max = Collections.max(Arrays.asList(ints));
         int[] arr = new int[length];
         int sum = 0;
         Map map = new HashMap(length);
-        int multiple = Integer.parseInt("1"+strMultiplication("0",max));
+        int multiple = Integer.parseInt("1" + strMultiplication("0", max));
         for (int i = 0; i < length; i++) {
-            int temp = (int)(percentum[i] * multiple);
+            int temp = (int) (percentum[i] * multiple);
             arr[i] = temp;
-            if(i == 0){
-                map.put(i,new int[]{1,temp});
-            }else{
-                map.put(i,new int[]{sum,sum+temp});
+            if (i == 0) {
+                map.put(i, new int[]{1, temp});
+            } else {
+                map.put(i, new int[]{sum, sum + temp});
             }
             sum += temp;
         }
-        int indexSum = integer(1,sum);
-        int index =-1;
+        int indexSum = integer(1, sum);
+        int index = -1;
         for (int i = 0; i < length; i++) {
-            int[]  scope = (int[]) map.get(i);
-            if(indexSum ==1 ){
+            int[] scope = (int[]) map.get(i);
+            if (indexSum == 1) {
                 index = 0;
                 break;
             }
-            if(indexSum > scope[0] && indexSum <= scope[1]){
-                index =i;
+            if (indexSum > scope[0] && indexSum <= scope[1]) {
+                index = i;
                 break;
             }
         }
-        if(index == -1){
+        if (index == -1) {
             throw new RuntimeException("随机失败");
-        }else{
+        } else {
             return param[index];
         }
     }
+
     /**
      * 返回一个UUID
      *
@@ -263,11 +234,44 @@ public final class RandomUtil {
      * @return
      */
     public static String squid() {
-        Long date = new Date().getTime();
+        Long date = System.currentTimeMillis();
         String s = UUID.randomUUID().toString();
         String str = Long.toHexString(date);
-        String result = str + OpslabConfig.HOST_FEATURE
+        String result = str + SysUtil.HOST_IP
                 + s.substring(17, 18) + s.substring(19, 23) + s.substring(24);
         return result.toUpperCase();
+    }
+
+    /**
+     * 根据字符串生成密钥字节数组
+     *
+     * @param hexStr 十六进制字符串
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    public static byte[] build3DesKey(String hexStr) throws UnsupportedEncodingException {
+        // 声明一个位的字节数组，默认里面都是0
+        byte[] key = new byte[24];
+        // 将字符串转成字节数组
+        byte[] temp = hexStr.getBytes("UTF-8");
+
+		/*
+         * 执行数组拷贝 System.arraycopy(源数组，从源数组哪里开始拷贝，目标数组，拷贝多少位)
+		 */
+        if (key.length > temp.length) {
+            // 如果temp不够位，则拷贝temp数组整个长度的内容到key数组中
+            System.arraycopy(temp, 0, key, 0, temp.length);
+        } else {
+            // 如果temp大于位，则拷贝temp数组个长度的内容到key数组中
+            System.arraycopy(temp, 0, key, 0, key.length);
+        }
+        System.out.println("【十六进制24字节-密钥】：1A2B3C4D5E6F78901234");
+        System.out.println("【ASCII-密钥】：" + ConvertUtil.bytesToHexString(key));
+
+        return key;
+    }
+
+    public static void main(String[] args) throws UnsupportedEncodingException {
+        build3DesKey("1A2B3C4D5E6F78901234");
     }
 }

@@ -1,4 +1,4 @@
-package com.berry.utils;
+package com.berry.utils.encrypt;
 
 
 import java.security.Key;
@@ -26,7 +26,6 @@ import sun.misc.BASE64Encoder;
  * JAVA实现RSA加密, 非对称加密算法
  */
 public class RSA {
-    private static Logger logger = Logger.getLogger(RSA.class);
 
     public static final String KEY_ALGORITHM = "RSA";
     public static final String SIGNATURE_ALGORITHM = "MD5withRSA";
@@ -266,10 +265,10 @@ public class RSA {
             //取得公钥和么私钥
             keyMap = initKey();
             String publicKey = getPublicKey(keyMap);
-            logger.info("字符类型公钥:" + publicKey);
+            System.out.println("字符类型公钥:" + publicKey);
 
             String privateKey = getPrivateKey(keyMap);
-            logger.info("字符类型私钥:" + privateKey);
+            System.out.println("字符类型私钥:" + privateKey);
 
 
             System.err.println("公钥加密——私钥解密");
@@ -301,10 +300,10 @@ public class RSA {
             byte[] strByte = str.getBytes();
 //			//私钥加密
             byte[] encode = encryptByPrivateKey(strByte, privateKey);
-            logger.info("私钥加密结果:" + encryptBASE64(encode));
+            System.out.println("私钥加密结果:" + encryptBASE64(encode));
             //公钥解密
             byte[] decode = decryptByPublicKey(encode, publicKey);
-            logger.info("公钥解密结果:" + new String(decode));
+            System.out.println("公钥解密结果:" + new String(decode));
 
         } catch (Exception e) {
             e.printStackTrace();

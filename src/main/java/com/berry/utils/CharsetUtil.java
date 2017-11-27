@@ -113,7 +113,7 @@ public final class CharsetUtil {
 
     public final static String getDefaultCharSet() throws UnsupportedEncodingException {
         OutputStreamWriter writer = new OutputStreamWriter(new ByteArrayOutputStream(), CharsetUtil.UTF_8);
-        String             enc    = writer.getEncoding();
+        String enc = writer.getEncoding();
         return enc;
     }
 
@@ -127,7 +127,7 @@ public final class CharsetUtil {
      * @throws UnsupportedEncodingException
      */
     public final static String changeCharset(String str, String oldCharset,
-            String newCharset) throws UnsupportedEncodingException {
+                                             String newCharset) throws UnsupportedEncodingException {
         if (str != null) {
             // 用旧的字符编码解码字符串。解码可能会出现异常。
             byte[] bs = str.getBytes(oldCharset);
@@ -135,6 +135,63 @@ public final class CharsetUtil {
             return new String(bs, newCharset);
         }
         return null;
+    }
+
+    /**
+     * test
+     */
+    public static void main(String[] args) {
+        System.out.println("原Unicode编码：\\uD83D\\uDC95");
+        String getGbByUnicode = unicodeToGb("\\uD83D\\uDC95");
+        System.out.println("Unicode to 中文:" + getGbByUnicode);
+        String getUnicodeByGb = gbToUnicode(getGbByUnicode);
+        System.out.println("中文 to Unicode:" + getUnicodeByGb);
+    }
+
+    /**
+     * 中文转Unicode
+     *
+     * @param gbString
+     * @return
+     */
+    public static String gbToUnicode(final String gbString) {
+        char[] utfBytes = gbString.toCharArray();
+        String unicodeBytes = "";
+        for (int byteIndex = 0; byteIndex < utfBytes.length; byteIndex++) {
+            //转换为16进制整型字符串
+            String hexB = Integer.toHexString(utfBytes[byteIndex]);
+            if (hexB.length() <= 2) {
+                hexB = "00" + hexB;
+            }
+            unicodeBytes = unicodeBytes + "\\u" + hexB;
+        }
+        return unicodeBytes;
+    }
+
+    /**
+     * Unicode转中文
+     *
+     * @param unicodeStr
+     * @return
+     */
+    public static String unicodeToGb(final String unicodeStr) {
+        int start = 0;
+        int end = 0;
+        final StringBuffer buffer = new StringBuffer();
+        while (start > -1) {
+            end = unicodeStr.indexOf("\\u", start + 2);
+            String charStr = "";
+            if (end == -1) {
+                charStr = unicodeStr.substring(start + 2, unicodeStr.length());
+            } else {
+                charStr = unicodeStr.substring(start + 2, end);
+            }
+            // 16进制parse整形字符串。
+            char letter = (char) Integer.parseInt(charStr, 16);
+            buffer.append(new Character(letter).toString());
+            start = end;
+        }
+        return buffer.toString();
     }
 
     /**

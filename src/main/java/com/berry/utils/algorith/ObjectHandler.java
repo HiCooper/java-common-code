@@ -1,4 +1,4 @@
-package com.berry.utils.algorithmImpl;
+package com.berry.utils.algorith;
 
 /**
  * 定义一些处理接口，便于优雅的处理一些数据,实现的方法不返回数据

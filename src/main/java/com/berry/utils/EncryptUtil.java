@@ -18,7 +18,9 @@ import sun.misc.BASE64Encoder;
  * 加密常用类
  */
 public class EncryptUtil {
-    // 密钥是16位长度的byte[]进行Base64转换后得到的字符串
+    /**
+     * 密钥是16位长度的byte[]进行Base64转换后得到的字符串
+     */
     public static String key = "xxxxxxxxxxxxxxxxxxxxxxx";
 
 
@@ -101,7 +103,7 @@ public class EncryptUtil {
         // 进行解密校检
         for (int i = 0; i < md5Hash.length; i++) {
             if (md5Hash[i] != temp[i]) {
-                // System.out.println(md5Hash[i] + "MD5校验错误。" + temp[i]);
+                System.out.println(md5Hash[i] + "MD5校验错误。" + temp[i]);
                 throw new Exception("MD5校验错误。");
             }
         }

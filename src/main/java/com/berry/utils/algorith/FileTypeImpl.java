@@ -1,4 +1,4 @@
-package com.berry.utils.algorithmImpl;
+package com.berry.utils.algorith;
 
 import java.io.File;
 import java.io.FileInputStream;
