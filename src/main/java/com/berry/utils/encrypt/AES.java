@@ -25,7 +25,7 @@ public class AES {
      */
     public static void main(String[] args) {
         String content = "test";
-        String password = getRandomStr();
+        String password = "password";
         // 加密
         System.out.println("加密前：" + content);
         String encryptResult = encrypt(content, password);
@@ -35,21 +35,7 @@ public class AES {
         System.out.println("解密后：" + new String(decryptResult));
     }
 
-    /**
-     * 随机生成32位字符串
-     *
-     * @return
-     */
-    public static String getRandomStr() {
-        String base = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-        Random random = new Random();
-        StringBuffer sb = new StringBuffer();
-        for (int i = 0; i < 32; i++) {
-            int number = random.nextInt(base.length());
-            sb.append(base.charAt(number));
-        }
-        return sb.toString();
-    }
+
 
     /**
      * 加密
@@ -90,6 +76,26 @@ public class AES {
     }
 
     /**
+     * 将16进制字符串转换为二进制字符数组
+     *
+     * @param hexStr
+     * @return
+     */
+    public static byte[] parseHexStr2Byte(String hexStr) {
+        if (hexStr.length() < 1) {
+            return null;
+        }
+        byte[] result = new byte[hexStr.length() / 2];
+        for (int i = 0; i < hexStr.length() / 2; i++) {
+            int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);
+            int low = Integer.parseInt(hexStr.substring(i * 2 + 1, i * 2 + 2),
+                    16);
+            result[i] = (byte) (high * 16 + low);
+        }
+        return result;
+    }
+
+    /**
      * 解密
      *
      * @param content  待解密内容
@@ -126,25 +132,7 @@ public class AES {
         return null;
     }
 
-    /**
-     * 将16进制字符串转换为二进制字符数组
-     *
-     * @param hexStr
-     * @return
-     */
-    private static byte[] parseHexStr2Byte(String hexStr) {
-        if (hexStr.length() < 1) {
-            return null;
-        }
-        byte[] result = new byte[hexStr.length() / 2];
-        for (int i = 0; i < hexStr.length() / 2; i++) {
-            int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);
-            int low = Integer.parseInt(hexStr.substring(i * 2 + 1, i * 2 + 2),
-                    16);
-            result[i] = (byte) (high * 16 + low);
-        }
-        return result;
-    }
+
 
     /**
      * 加密--这种加密方式有两种限制

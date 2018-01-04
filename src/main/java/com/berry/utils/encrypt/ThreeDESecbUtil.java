@@ -1,8 +1,5 @@
 package com.berry.utils.encrypt;
 
-
-import java.io.UnsupportedEncodingException;
-
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.SecretKeyFactory;
@@ -25,6 +22,22 @@ public class ThreeDESecbUtil {
      * 密钥
      */
     private static SecretKey securekey;
+
+
+    public static void main(String[] args) {
+        String msg = "bj_simsys";
+        //key长度必须为32位
+        String key = "1A2B3C4D5E6F78901234A5B68E9F0";
+        System.out.println("【加密前】：" + msg);
+
+        //加密
+        byte[] secretArr = ThreeDESecbUtil.encrypt(key, msg.getBytes());
+        System.out.println("【加密后】：" + ConvertUtil.bytesToHexString(secretArr));
+
+        //解密
+        byte[] myMsgArr = ThreeDESecbUtil.decryptMode(key, secretArr);
+        System.out.println("【解密后】：" + new String(myMsgArr));
+    }
 
     /**
      * 加密
@@ -79,23 +92,5 @@ public class ThreeDESecbUtil {
             e3.printStackTrace();
         }
         return null;
-    }
-
-
-
-
-
-    public static void main(String[] args) {
-        String msg = "bj_simsys";
-        String key = "1A2B3C4D5E6F78901234A5B6C7D8E9F0";
-        System.out.println("【加密前】：" + msg);
-
-        //加密
-        byte[] secretArr = ThreeDESecbUtil.encrypt(key, msg.getBytes());
-        System.out.println("【加密后】：" + ConvertUtil.bytesToHexString(secretArr));
-
-        //解密
-        byte[] myMsgArr = ThreeDESecbUtil.decryptMode(key, secretArr);
-        System.out.println("【解密后】：" + new String(myMsgArr));
     }
 }

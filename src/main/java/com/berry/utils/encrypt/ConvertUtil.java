@@ -150,12 +150,24 @@ public final class ConvertUtil {
         return s;
     }
 
-    public static void main(String[] args) {
-        //-2的二进制表示  10000000000000000000000000000110  补码 11111111111111111111111111111001+1=11111111111111111111111111111010
-        int number = -2;
-        //原始数二进制
-        String binaryStr = Integer.toBinaryString(number);
-        System.out.println("二进制：" + binaryStr);
+    /**
+     * 将16进制字符串转换为二进制字符数组
+     *
+     * @param hexStr
+     * @return
+     */
+    public static byte[] parseHexStr2Byte(String hexStr) {
+        if (hexStr.length() < 1) {
+            return null;
+        }
+        byte[] result = new byte[hexStr.length() / 2];
+        for (int i = 0; i < hexStr.length() / 2; i++) {
+            int high = Integer.parseInt(hexStr.substring(i * 2, i * 2 + 1), 16);
+            int low = Integer.parseInt(hexStr.substring(i * 2 + 1, i * 2 + 2),
+                    16);
+            result[i] = (byte) (high * 16 + low);
+        }
+        return result;
     }
 
     /**
@@ -212,7 +224,7 @@ public final class ConvertUtil {
     }
 
     /**
-     * 将二进制转换为十六进制字符输出
+     * 将二进制转换为十六进制字符串输出
      *
      * @param bytes bytes数组
      */
@@ -224,7 +236,7 @@ public final class ConvertUtil {
             hex = String.valueOf(hexStr.charAt((b & 0xF0) >> 4));
             //字节低4位
             hex += String.valueOf(hexStr.charAt(b & 0x0F));
-            result += hex + " ";
+            result += hex;
         }
         return result;
     }

@@ -21,7 +21,7 @@ public class DES {
         String username = "bj_simsys";
         System.out.println("加密前：" + username);
         // 密码，长度要是8的倍数
-        String key = "1A2B3C4D5E6F78901234A5B6C7D8E9F0";
+        String key = "1A204gad";
 
         byte[] result = DES.encrypt(username.getBytes(), key);
         System.out.println("加密后：" + ConvertUtil.bytesToHexString(result));

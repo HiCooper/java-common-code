@@ -213,19 +213,6 @@ public final class RandomUtil {
     }
 
     /**
-     * 返回一个UUID
-     *
-     * @return 大写的UUID
-     */
-    public static String UUID() {
-        UUID uuid = UUID.randomUUID();
-        String s = uuid.toString();
-        String temp = s.substring(0, 8) + s.substring(9, 13) +
-                s.substring(14, 18) + s.substring(19, 23) + s.substring(24);
-        return temp.toUpperCase();
-    }
-
-    /**
      * 返回一个有序列的uuid编码
      * 前11位为时间(毫秒)
      * 中间4位为主机特征码
@@ -271,7 +258,19 @@ public final class RandomUtil {
         return key;
     }
 
-    public static void main(String[] args) throws UnsupportedEncodingException {
-        build3DesKey("1A2B3C4D5E6F78901234");
+    /**
+     * 随机生成32位字符串
+     *
+     * @return
+     */
+    public static String getRandomStr() {
+        String base = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+        Random random = new Random();
+        StringBuffer sb = new StringBuffer();
+        for (int i = 0; i < 32; i++) {
+            int number = random.nextInt(base.length());
+            sb.append(base.charAt(number));
+        }
+        return sb.toString();
     }
 }
